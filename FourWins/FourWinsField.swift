@@ -35,6 +35,27 @@ class FourWinsField {
     var columnStacks = Array(repeating: Array<Chip>(), count: FourWinsField.columnCount)
 }
 
+extension RandomAccessCollection {
+    subscript(safe index: Index) -> Element? {
+        guard indices.contains(index) else { return nil }
+        return self[index]
+    }
+}
+
+extension Array where Element == Chip? {
+    fileprivate func connectChipCount(for player: Chip, at insertionPoint: Int) -> Int {
+        let lhsRowCount = self[0..<insertionPoint]
+            .reversed()
+            .prefix(while: { $0 == player })
+            .count
+        let rhsRowCount = self[insertionPoint...]
+            .prefix(while: { $0 == player })
+            .count
+    
+        return lhsRowCount + rhsRowCount
+    }
+}
+
 extension FourWinsField: FourWinsLogic {
     
     private func checkVerticalWin(for player: Chip, at column: Int) -> Bool {
@@ -44,22 +65,37 @@ extension FourWinsField: FourWinsLogic {
     
     private func checkHorizontalWin(for player: Chip, at column: Int) -> Bool {
         let height = columnStacks[column].count - 1
-        let row = columnStacks.map { column -> Chip? in
-            guard column.indices.contains(height) else {
-                return nil
-            }
-            return column[height]
-        }
+        let row = columnStacks.map { $0[safe: height] }
         
-        let lhsRowCount = row[0..<column]
-            .reversed()
-            .prefix(while: { $0 == player })
-            .count
-        let rhsRowCount = row[column...]
-            .prefix(while: { $0 == player })
-            .count
+        return row.connectChipCount(for: player, at: column) >= FourWinsField.chipWinCount
+    }
+    
+    private func diagnoal(startX: Int, startY: Int) -> (lower: [Chip?], upper: [Chip?]) {
+        let lowerMinX = startX - min(startX, startY)
+        let minY = startY - min(startX, startY)
+        let lowerRangeX = (lowerMinX..<FourWinsField.columnCount)
+        let lowerRangeY = (minY..<FourWinsField.columnHeight)
+        let lowerIndeces = zip(lowerRangeX, lowerRangeY)
+        let lowerDiagonalRow = lowerIndeces.map { columnStacks[$0][safe: $1] }
         
-        return lhsRowCount + rhsRowCount >= 4
+        let upperMinX = FourWinsField.columnCount - max(startX, startY)
+        let maxY = FourWinsField.columnHeight - 1 - min(startX, startY)
+        let upperRangeX = (upperMinX..<FourWinsField.columnCount)
+        let upperRangeY = (0..<maxY).reversed()
+        let upperIndeces = zip(upperRangeX, upperRangeY)
+        let upperDiagonalRow = upperIndeces.map { columnStacks[$0][safe: $1] }
+        
+        return (lowerDiagonalRow, upperDiagonalRow)
+    }
+    
+    private func checkDiagonalWin(for player: Chip, at column: Int) -> Bool {
+        let height = columnStacks[column].count - 1
+        let lowerInsertionPoiunt = min(height, column)
+        let upperInsertionPoiunt = min(FourWinsField.columnHeight - height - 1, column)
+        let resultDiagonalRows =  diagnoal(startX: column, startY: height)
+        
+        return resultDiagonalRows.lower.connectChipCount(for: player, at: lowerInsertionPoiunt) >= FourWinsField.chipWinCount
+            || resultDiagonalRows.upper.connectChipCount(for: player, at: upperInsertionPoiunt) >= FourWinsField.chipWinCount
     }
     
     func throwChip(player: Chip, column: Int) throws -> Result {
@@ -72,7 +108,8 @@ extension FourWinsField: FourWinsLogic {
         
         columnStacks[column].append(player)
         if checkVerticalWin(for: player, at: column)
-            || checkHorizontalWin(for: player, at: column) {
+            || checkHorizontalWin(for: player, at: column)
+            || checkDiagonalWin(for: player, at: column) {
             return .won(player)
         }
         return .nextTurn
