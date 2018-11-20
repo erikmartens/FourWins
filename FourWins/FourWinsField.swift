@@ -37,9 +37,29 @@ class FourWinsField {
 
 extension FourWinsField: FourWinsLogic {
     
-    private func checkHorizontal(for player: Chip, at column: Int) -> Bool {
+    private func checkVerticalWin(for player: Chip, at column: Int) -> Bool {
         let chipsInARow = columnStacks[column].reversed().prefix(while: { $0 == player })
         return chipsInARow.count == FourWinsField.chipWinCount
+    }
+    
+    private func checkHorizontalWin(for player: Chip, at column: Int) -> Bool {
+        let height = columnStacks[column].count - 1
+        let row = columnStacks.map { column -> Chip? in
+            guard column.indices.contains(height) else {
+                return nil
+            }
+            return column[height]
+        }
+        
+        let lhsRowCount = row[0..<column]
+            .reversed()
+            .prefix(while: { $0 == player })
+            .count
+        let rhsRowCount = row[column...]
+            .prefix(while: { $0 == player })
+            .count
+        
+        return lhsRowCount + rhsRowCount >= 4
     }
     
     func throwChip(player: Chip, column: Int) throws -> Result {
@@ -51,7 +71,8 @@ extension FourWinsField: FourWinsLogic {
         }
         
         columnStacks[column].append(player)
-        if checkHorizontal(for: player, at: column) {
+        if checkVerticalWin(for: player, at: column)
+            || checkHorizontalWin(for: player, at: column) {
             return .won(player)
         }
         return .nextTurn
