@@ -30,82 +30,82 @@ class FourWinsTests: XCTestCase {
 
     func testFirstTurn() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
     }
     
     func testPlayerWonVerticalRow_fromFirstIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .won(.player1))
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .won(👦))
     }
     
     func testPlayerWonVerticalRow_fromLastPossibleIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .won(.player1))
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .won(👦))
     }
     
     func testPlayerWonHorizontalRow_fromFirstIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 1), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 2), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 3), .won(.player1))
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 1), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 2), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 3), .won(👦))
     }
     
     func testPlayerWonHorizontalRow_fromLastPossibleIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 1), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 2), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 3), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 4), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 5), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 6), .won(.player1))
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 1), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 2), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 3), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 4), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 5), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 6), .won(👦))
     }
     
     func testVerticalRowBroken_secondIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
     }
     
     func testHorizontalRowBroken_secondIndex() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 1), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 2), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 3), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 4), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 1), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 2), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 3), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 4), .nextTurn)
     }
     
     func testColumnOverdlow() {
         let fourWinsField = FourWinsField()
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player1, column: 0), .nextTurn)
-        XCTAssertEqual(try? fourWinsField.throwChip(player: .player2, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👦, column: 0), .nextTurn)
+        XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         
-        XCTAssertThrowsError(try fourWinsField.throwChip(player: .player2, column: 0))
+        XCTAssertThrowsError(try fourWinsField.throwChip(player: 👩, column: 0))
     }
     
     func testColumnIndexOutOfBounds() {
         let fourWinsField = FourWinsField()
-        XCTAssertNoThrow(try fourWinsField.throwChip(player: .player1, column: 0))
-        XCTAssertNoThrow(try fourWinsField.throwChip(player: .player1, column: 6))
-        XCTAssertThrowsError(try fourWinsField.throwChip(player: .player1, column: -1))
-        XCTAssertThrowsError(try fourWinsField.throwChip(player: .player1, column: 7))
+        XCTAssertNoThrow(try fourWinsField.throwChip(player: 👦, column: 0))
+        XCTAssertNoThrow(try fourWinsField.throwChip(player: 👦, column: 6))
+        XCTAssertThrowsError(try fourWinsField.throwChip(player: 👦, column: -1))
+        XCTAssertThrowsError(try fourWinsField.throwChip(player: 👦, column: 7))
     }
     
     func testDiagonalWinBottemLeftToTopRight() {
