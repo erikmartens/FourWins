@@ -42,15 +42,49 @@ extension RandomAccessCollection {
     }
 }
 
+extension Sequence {
+    func count(while predicate: (Element) throws -> Bool) rethrows -> Int {
+        var count = 0
+        for element in self {
+            if try predicate(element) {
+                count += 1
+            } else {
+                break
+            }
+        }
+        return count
+    }
+}
+
+extension RandomAccessCollection where Element: RandomAccessCollection, Index == Int, Element.Index == Int {
+    fileprivate func elements(from start: Position, in direction: Direction) -> LazyMapSequence<UnfoldSequence<Position, (Position?, Bool)>, Self.Element.Element?>{
+        let indices = sequence(first: start) { $0 + direction }
+        return indices.lazy
+            .map({ self[safe: $0.x]?[safe: $0.y] })
+    }
+    
+}
+extension RandomAccessCollection where
+    Element: RandomAccessCollection,
+    Index == Int,
+    Element.Index == Int,
+    Element.Element: Equatable
+{
+    fileprivate func connectedElementCount(on line: Line) -> Int {
+        guard let element = self[safe: line.start.x]?[safe: line.start.y] else { return 0 }
+        return 1 +
+            elements(from: line.start, in: line.direction).dropFirst().count(while: { $0 == element }) +
+            elements(from: line.start, in: line.direction.inverted).dropFirst().count(while: { $0 == element })
+    }
+}
+
 extension Array where Element == Chip? {
     fileprivate func connectChipCount(for player: Chip, at insertionPoint: Int) -> Int {
         let lhsRowCount = self[0..<insertionPoint]
             .reversed()
-            .prefix(while: { $0 == player })
-            .count
+            .count(while: { $0 == player })
         let rhsRowCount = self[insertionPoint...]
-            .prefix(while: { $0 == player })
-            .count
+            .count(while: { $0 == player })
     
         return lhsRowCount + rhsRowCount
     }
@@ -70,32 +104,13 @@ extension FourWinsField: FourWinsLogic {
         return row.connectChipCount(for: player, at: column) >= FourWinsField.chipWinCount
     }
     
-    private func diagnoal(startX: Int, startY: Int) -> (lower: [Chip?], upper: [Chip?]) {
-        let lowerMinX = startX - min(startX, startY)
-        let minY = startY - min(startX, startY)
-        let lowerRangeX = (lowerMinX..<FourWinsField.columnCount)
-        let lowerRangeY = (minY..<FourWinsField.columnHeight)
-        let lowerIndeces = zip(lowerRangeX, lowerRangeY)
-        let lowerDiagonalRow = lowerIndeces.map { columnStacks[$0][safe: $1] }
-        
-        let upperMinX = FourWinsField.columnCount - max(startX, startY)
-        let maxY = FourWinsField.columnHeight - 1 - min(startX, startY)
-        let upperRangeX = (upperMinX..<FourWinsField.columnCount)
-        let upperRangeY = (0..<maxY).reversed()
-        let upperIndeces = zip(upperRangeX, upperRangeY)
-        let upperDiagonalRow = upperIndeces.map { columnStacks[$0][safe: $1] }
-        
-        return (lowerDiagonalRow, upperDiagonalRow)
-    }
-    
     private func checkDiagonalWin(for player: Chip, at column: Int) -> Bool {
-        let height = columnStacks[column].count - 1
-        let lowerInsertionPoiunt = min(height, column)
-        let upperInsertionPoiunt = min(FourWinsField.columnHeight - height - 1, column)
-        let resultDiagonalRows =  diagnoal(startX: column, startY: height)
-        
-        return resultDiagonalRows.lower.connectChipCount(for: player, at: lowerInsertionPoiunt) >= FourWinsField.chipWinCount
-            || resultDiagonalRows.upper.connectChipCount(for: player, at: upperInsertionPoiunt) >= FourWinsField.chipWinCount
+        let y = columnStacks[column].count - 1
+        let start = Position(column, y)
+        let bottomLeftToTopRight = Line(start: start, direction: Direction(1, 1))
+        let topLeftToBottomRight = Line(start: start, direction: Direction(1, -1))
+        return columnStacks.connectedElementCount(on: bottomLeftToTopRight) >= FourWinsField.chipWinCount ||
+            columnStacks.connectedElementCount(on: topLeftToBottomRight) >= FourWinsField.chipWinCount
     }
     
     func throwChip(player: Chip, column: Int) throws -> Result {
