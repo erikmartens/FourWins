@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C1AF34B921AD673C005CA527 /* TicTacToeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF34B821AD673C005CA527 /* TicTacToeTests.swift */; };
+		C1AF34BB21AD6B69005CA527 /* Sequence+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF34BA21AD6B69005CA527 /* Sequence+Extensions.swift */; };
+		C1AF34BD21AD6B9B005CA527 /* RandomAccessCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1AF34BC21AD6B9B005CA527 /* RandomAccessCollection+Extension.swift */; };
 		C1C1395B21A5836E004842EB /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1C1395A21A5836E004842EB /* Math.swift */; };
 		F260910F21A427FD003B9715 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F260910E21A427FD003B9715 /* AppDelegate.swift */; };
 		F260911121A427FD003B9715 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F260911021A427FD003B9715 /* ViewController.swift */; };
@@ -14,7 +17,7 @@
 		F260911621A42801003B9715 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F260911521A42801003B9715 /* Assets.xcassets */; };
 		F260911921A42801003B9715 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F260911721A42801003B9715 /* LaunchScreen.storyboard */; };
 		F260912421A42801003B9715 /* FourWinsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F260912321A42801003B9715 /* FourWinsTests.swift */; };
-		F260912F21A428D5003B9715 /* FourWinsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F260912E21A428D5003B9715 /* FourWinsField.swift */; };
+		F260912F21A428D5003B9715 /* GameField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F260912E21A428D5003B9715 /* GameField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +31,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C1AF34B821AD673C005CA527 /* TicTacToeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacToeTests.swift; sourceTree = "<group>"; };
+		C1AF34BA21AD6B69005CA527 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
+		C1AF34BC21AD6B9B005CA527 /* RandomAccessCollection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extension.swift"; sourceTree = "<group>"; };
 		C1C1395A21A5836E004842EB /* Math.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		F260910B21A427FD003B9715 /* FourWins.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FourWins.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F260910E21A427FD003B9715 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +45,7 @@
 		F260911F21A42801003B9715 /* FourWinsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FourWinsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F260912321A42801003B9715 /* FourWinsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourWinsTests.swift; sourceTree = "<group>"; };
 		F260912521A42801003B9715 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F260912E21A428D5003B9715 /* FourWinsField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourWinsField.swift; sourceTree = "<group>"; };
+		F260912E21A428D5003B9715 /* GameField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +93,10 @@
 				F260911521A42801003B9715 /* Assets.xcassets */,
 				F260911721A42801003B9715 /* LaunchScreen.storyboard */,
 				F260911A21A42801003B9715 /* Info.plist */,
-				F260912E21A428D5003B9715 /* FourWinsField.swift */,
+				F260912E21A428D5003B9715 /* GameField.swift */,
 				C1C1395A21A5836E004842EB /* Math.swift */,
+				C1AF34BA21AD6B69005CA527 /* Sequence+Extensions.swift */,
+				C1AF34BC21AD6B9B005CA527 /* RandomAccessCollection+Extension.swift */,
 			);
 			path = FourWins;
 			sourceTree = "<group>";
@@ -97,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				F260912321A42801003B9715 /* FourWinsTests.swift */,
+				C1AF34B821AD673C005CA527 /* TicTacToeTests.swift */,
 				F260912521A42801003B9715 /* Info.plist */,
 			);
 			path = FourWinsTests;
@@ -203,9 +212,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F260912F21A428D5003B9715 /* FourWinsField.swift in Sources */,
+				F260912F21A428D5003B9715 /* GameField.swift in Sources */,
 				F260911121A427FD003B9715 /* ViewController.swift in Sources */,
+				C1AF34BB21AD6B69005CA527 /* Sequence+Extensions.swift in Sources */,
 				F260910F21A427FD003B9715 /* AppDelegate.swift in Sources */,
+				C1AF34BD21AD6B9B005CA527 /* RandomAccessCollection+Extension.swift in Sources */,
 				C1C1395B21A5836E004842EB /* Math.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1AF34B921AD673C005CA527 /* TicTacToeTests.swift in Sources */,
 				F260912421A42801003B9715 /* FourWinsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

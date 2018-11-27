@@ -13,28 +13,29 @@ fileprivate let 🧑🏾: Chip = .player1
 fileprivate let 👩: Chip = .player2
 fileprivate let 👤: Chip? = nil
 
-extension FourWinsField {
-    fileprivate convenience init(_ field: [[Chip?]]) {
-        self.init()
+extension GameField {
+    fileprivate static func makeFourWin(_ field: [[Chip?]]) -> GameField {
+        let fourWinsField = GameField.makeFourWin()
         field.reversed().forEach { (chips) in
             for (column, chip) in chips.enumerated() {
                 if let chip = chip {
-                    XCTAssertEqual(try? throwChip(player: chip, column: column), .nextTurn)
+                    XCTAssertEqual(try? fourWinsField.throwChip(player: chip, column: column), .nextTurn)
                 }
             }
         }
+        return fourWinsField
     }
 }
 
 class FourWinsTests: XCTestCase {
 
     func testFirstTurn() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
     }
     
     func testPlayerWonVerticalRow_fromFirstIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
@@ -42,7 +43,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testPlayerWonVerticalRow_fromLastPossibleIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
@@ -52,7 +53,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testPlayerWonHorizontalRow_fromFirstIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 1), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 2), .nextTurn)
@@ -60,7 +61,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testPlayerWonHorizontalRow_fromLastPossibleIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 1), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 2), .nextTurn)
@@ -71,7 +72,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testVerticalRowBroken_secondIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
@@ -80,7 +81,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testHorizontalRowBroken_secondIndex() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 1), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 2), .nextTurn)
@@ -89,7 +90,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testColumnOverdlow() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 0), .nextTurn)
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .nextTurn)
@@ -101,7 +102,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testColumnIndexOutOfBounds() {
-        let fourWinsField = FourWinsField()
+        let fourWinsField = GameField.makeFourWin()
         XCTAssertNoThrow(try fourWinsField.throwChip(player: 🧑🏾, column: 0))
         XCTAssertNoThrow(try fourWinsField.throwChip(player: 🧑🏾, column: 6))
         XCTAssertThrowsError(try fourWinsField.throwChip(player: 🧑🏾, column: -1))
@@ -109,7 +110,7 @@ class FourWinsTests: XCTestCase {
     }
     
     func testDiagonalWinBottemLeftToTopRight() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
@@ -121,7 +122,7 @@ class FourWinsTests: XCTestCase {
         
     }
     func testDiagonalWinBottemRightToTopLeft() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
@@ -134,7 +135,7 @@ class FourWinsTests: XCTestCase {
     
     
     func testDiagonalWinTopLeftToBottomRight() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
@@ -145,7 +146,7 @@ class FourWinsTests: XCTestCase {
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .won(🧑🏾))
     }
     func testDiagonalWinTopLeftToBottomRight2() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👩, 🧑🏾, 👤, 👤, 👤, 👤, 👤],
             [👩, 👩, 🧑🏾, 👤, 👤, 👤, 👤],
@@ -156,7 +157,7 @@ class FourWinsTests: XCTestCase {
         XCTAssertEqual(try? fourWinsField.throwChip(player: 🧑🏾, column: 0), .won(🧑🏾))
     }
     func testDiagonalWinTopRightToBottomLeft() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
@@ -167,7 +168,7 @@ class FourWinsTests: XCTestCase {
         XCTAssertEqual(try? fourWinsField.throwChip(player: 👩, column: 6), .won(👩))
     }
     func testDiagonalWinTopRightToBottomLeft2() {
-        let fourWinsField = FourWinsField([
+        let fourWinsField = GameField.makeFourWin([
             [👤, 👤, 👤, 👤, 👤, 👤, 👤],
             [👤, 👤, 👤, 👤, 👤, 👩, 🧑🏾],
             [👤, 👤, 👤, 👤, 👩, 👩, 🧑🏾],
